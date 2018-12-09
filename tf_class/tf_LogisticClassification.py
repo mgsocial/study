@@ -38,7 +38,7 @@ cost = -tf.reduce_mean(Y * tf.log(hypothesis) + (1 - Y) * tf.log(1 - hypothesis)
 
 train = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
 
-predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
+predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)                      ## tf.cast()  True나 False값은 1과 0으로 치환
 accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, Y), dtype=tf.float32))
 
 
@@ -49,10 +49,8 @@ with tf.Session() as sess:
         cost_val, _ = sess.run([cost, train], feed_dict={X: x_data, Y: y_data})
         if step % 200 == 0:
             print(step, cost_val)
-
-
-h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data})
-print("\nhypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)
+    h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data})
+    print("\nhypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)
 
 
 ## 당뇨병 분류 예측
@@ -69,22 +67,22 @@ b = tf.Variable(tf.random_normal([1]), name='bias')
 
 hypothesis = tf.sigmoid(tf.matmul(X, W) + b)
 cost = -tf.reduce_mean(Y * tf.log(hypothesis) + (1 - Y) * tf.log(1 - hypothesis))
-train - tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
+train = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
 
 predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
-accuracy = tf.reduce_mean(tf.equal(predicted, Y), dtype=tf.float32))
+accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, Y), dtype=tf.float32))
 
 with tf.Session() as sess:
-              sess.run(tf.global_variables_initializer())
+    sess.run(tf.global_variables_initializer())
 
-              feed = {X: x_data, Y: y_data}
-              for step in range(10001):
-                            sess.run(train, feed_dict= feed)
-              if step % 200 == 0:
-                            print(step, sess.run(cost, feed_dict = feed))
-
-h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data})
-print("\nhypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)
+    feed = {X: x_data, Y: y_data}
+    for step in range(10001):
+        sess.run(train, feed_dict= feed)
+        if step % 200 == 0:
+            print(step, sess.run(cost, feed_dict = feed))
+    h, c, a = sess.run([hypothesis, predicted, accuracy],
+                       feed_dict={X: x_data, Y: y_data})
+    print("\nhypothesis: ", h, "\nCorrect (Y): ", c, "\nAccuracy: ", a)
 
 
 
